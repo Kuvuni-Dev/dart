@@ -155,13 +155,13 @@ void main() {
     'coche' => '🚗 Vehículo de cuatro ruedas',
     'moto' => '🏍️ Vehículo de dos ruedas',
     'bici' => '🚲 Vehículo sin motor',
-    _ => '❓ Vehículo desconocido'
+    _ => '❓ Vehículo desconocido',
   };
   print(mensaje);
 
   // 3.2 Pattern matching con switch
   print('\n3.2 PATTERN MATCHING CON SWITCH:');
-  dynamic valor = 42;
+  dynamic valor = "Manolo";
   switch (valor) {
     case int n when n > 0:
       print('✓ Número positivo: $n');
@@ -210,11 +210,7 @@ void main() {
 
   // 3.6 Iteración sobre Map
   print('\n3.6 ITERACIÓN SOBRE MAP:');
-  Map<String, int> edades = {
-    'Ana': 25,
-    'Luis': 30,
-    'María': 28
-  };
+  Map<String, int> edades = {'Ana': 25, 'Luis': 30, 'María': 28};
 
   // Método 1: entries
   for (var entry in edades.entries) {
@@ -240,6 +236,10 @@ void main() {
     print('Número × 2 = ${numero * 2}');
   });
 
+  numeros.forEach(
+    (numero) => print('\nFunción flecha.\nNúmero × 2 = ${numero * 2}'),
+  );
+
   // 3.8 where - filtrado con condiciones
   print('\n3.8 WHERE (filtrado):');
   var pares = numeros.where((n) => n % 2 == 0);
@@ -259,8 +259,15 @@ void main() {
 
   // 3.10 Assert (solo en modo debug)
   print('\n3.10 ASSERT (validaciones en desarrollo):');
-  int velocidad = 100;
-  assert(velocidad <= 120, 'Velocidad excede límite'); // Solo corre en debug
+  int velocidad = 140;
+  /* 
+   * El siguiente assert lanzará un error si la condición es falsa.
+   * Útil para validar supuestos durante el desarrollo.
+  */
+  assert(
+    velocidad <= 120,
+    'Velocidad excede límite',
+  ); // Solo corre en debug si la condición es falsa
   print('✓ Velocidad válida: $velocidad km/h');
 
   // 3.11 SWITCH con múltiples condiciones
@@ -271,11 +278,31 @@ void main() {
     3 || 4 || 5 => '🌸 Primavera',
     6 || 7 || 8 => '☀️ Verano',
     9 || 10 || 11 => '🍂 Otoño',
-    _ => '❓ Mes inválido'
+    _ => '❓ Mes inválido',
   };
   print('Mes $mes: $estacion');
 
   // 3.12 Guard clauses (clausulas de guarda)
+  // ¿Qué es una guard clause?
+  // Es una verificación al inicio de una función que, si se cumple, interrumpe la ejecución mediante return, throw, continue, etc.
+
+  void procesarPedido(int? cantidad) {
+    // Salida temprana si es null
+    if (cantidad == null) {
+      print('⚠️ Cantidad no proporcionada');
+      return;
+    }
+
+    // Salida temprana si es inválida
+    if (cantidad <= 0) {
+      print('❌ Cantidad debe ser positiva');
+      return;
+    }
+
+    // Lógica principal solo si pasa las validaciones
+    print('✓ Procesando pedido de $cantidad unidades');
+  }
+
   print('\n3.12 GUARD CLAUSES (salidas tempranas):');
   procesarPedido(null);
   procesarPedido(0);
@@ -283,24 +310,93 @@ void main() {
 
   // 3.13 Switch expression con records (Dart 3.0+)
   print('\n3.13 SWITCH CON RECORDS:');
+
+  // Un record es una estructura ligera que agrupa valores sin necesidad de crear una clase.
+  // Ejemplo: (int, int) representa una tupla de dos enteros.
+  // Otros ejemplos de records: (String, double), (bool, List<int>), etc.
+  /*Un record es un tipo de dato compuesto, inmutable y sin identidad, que agrupa varios valores bajo una sola unidad.
+   
+   No necesita clases, constructores ni boilerplate.
+   (Boilerplate es todo el código repetitivo, estándar o ceremonial que 
+   debes escribir una y otra vez para que algo funcione, aunque no aporte lógica de negocio real.
+   Es ese código que “hay que poner porque sí”, porque el lenguaje, el framework o la arquitectura lo exige.
+   Ahora, data classes, records y otros mecanismos modernos buscan reducir el boilerplate al mínimo posible.
+   ).
+
+   Se define usando paréntesis y puede contener valores posicionales y/o nombrados.
+
+   var persona = ('Ana', 30);
+   Ese record contiene dos valores: un String y un int.
+
+    🏷️ Tipos de records
+    Dart soporta tres formas:
+
+    1. Records posicionales
+
+    var coordenadas = (10, 20);
+    Acceso:
+    coordenadas.$1; // 10
+    coordenadas.$2; // 20
+
+    2. Records nombrados
+
+    var usuario = (nombre: 'Ana', edad: 30);
+
+    usuario.nombre;
+    usuario.edad;
+
+    3. Records mixtos
+
+    var datos = ('Ana', edad: 30, true);
+
+    dart
+    datos.$1;     // 'Ana'
+    datos.edad;   // 30
+    datos.$2;     // true
+  */
   var coordenada = (2, 3);
   String cuadrante = switch (coordenada) {
     (int x, int y) when x > 0 && y > 0 => 'Cuadrante I',
     (int x, int y) when x < 0 && y > 0 => 'Cuadrante II',
     (int x, int y) when x < 0 && y < 0 => 'Cuadrante III',
     (int x, int y) when x > 0 && y < 0 => 'Cuadrante IV',
-    _ => 'Sobre un eje'
+    _ => 'Sobre un eje',
   };
   print('($coordenada): $cuadrante');
 
-  // 3.14 Iteración con enumerate (simulado)
+  // 3.14 Iteración con indice y valor de un iterable
+  /* Iterables en Dart
+     Un iterable es una colección de elementos que se pueden recorrer uno a uno.
+     List<T>
+     Set<T>
+     Iterable<T>
+     MapEntry<K, V> dentro de map.entries
+  */
+  //Cualquier clase que implemente Iterable
   print('\n3.14 ITERACIÓN CON ÍNDICE Y VALOR:');
   List<String> colores = ['Rojo', 'Verde', 'Azul'];
+
+  /*colores.indexed
+    indexed es una extensión de Iterable que devuelve un iterable de records posicionales con esta forma:
+    (int, T) T es simplemente un nombre convencional que se usa para representar un tipo genérico.
+    Es decir, cada elemento es un record con:
+    $1 → índice
+    $2 → valor
+  */
+
   for (var (index, color) in colores.indexed) {
     print('$index: $color');
   }
 
   // 3.15 Control de flujo con try-catch
+
+  int dividir(int a, int b) {
+    if (b == 0) {
+      throw Exception('División por cero no permitida');
+    }
+    return a ~/ b;
+  }
+
   print('\n3.15 CONTROL DE FLUJO CON TRY-CATCH:');
   try {
     int resultado = dividir(10, 2);
@@ -332,156 +428,77 @@ void main() {
   }
 
   // 4.2 Switch con destructuring
+  /*
+  La desestructuración es una técnica que permite extraer valores de una estructura 
+  (como un record, lista, mapa, objeto, etc.) y asignarlos directamente a variables 
+  individuales de forma compacta y expresiva.
+  */
+
+  void procesarPunto(Map<String, int> punto) {
+    // Extrae el valor de la clave 'x' del Map (puede ser int o null)
+    var x = punto['x'];
+
+    // Extrae el valor de la clave 'y' del Map (puede ser int o null)
+    var y = punto['y'];
+
+    // Crea un record (tupla) con los valores (x, y) para hacer pattern matching
+    switch ((x, y)) {
+      // Caso 1: Si x es 0 Y y es 0 → Punto en el origen de coordenadas
+      case (0, 0):
+        print('📍 Origen');
+
+      // Caso 2: Si y es 0 pero x NO es 0 → Punto sobre el eje X
+      // 'var px' captura el valor de x en la variable px
+      // 'when px != null' es una guard clause que verifica que px no sea null
+      case (var px, 0) when px != null:
+        print('📍 Sobre eje X en ($px, 0)');
+
+      // Caso 3: Si x es 0 pero y NO es 0 → Punto sobre el eje Y
+      // 'var py' captura el valor de y en la variable py
+      // 'when py != null' verifica que py no sea null
+      case (0, var py) when py != null:
+        print('📍 Sobre eje Y en (0, $py)');
+
+      // Caso 4: x e y tienen valores diferentes de 0 → Punto en el plano
+      // 'var px, var py' captura ambos valores
+      // 'when px != null && py != null' verifica que ambos sean válidos
+      case (var px, var py) when px != null && py != null:
+        print('📍 Punto en ($px, $py)');
+
+      // Caso por defecto: Si ninguna condición anterior coincide
+      // (por ejemplo, si x o y son null)
+      default:
+        print('❓ Punto inválido');
+    }
+  }
+
   print('\n4.2 SWITCH CON DESTRUCTURING:');
   var punto = {'x': 10, 'y': 20};
   procesarPunto(punto);
 
-  // 4.3 Bucles con generadores (yield)
-  print('\n4.3 GENERADORES CON YIELD:');
-  for (var numero in generarNumeros(5)) {
-    print('Generado: $numero');
+  // 4.3 Recursión con estructuras de control
+
+  // Recursión
+
+  /*La recursión es una técnica en la que una función se llama a sí misma para
+   resolver un problema dividiéndolo en subproblemas más pequeños. Es un concepto general 
+   de programación, pero Dart lo soporta de forma natural y clara.
+   Funciona especialmente bien cuando la solución de un problema depende de la solución 
+   del mismo problema en una versión más simple.
+  */
+
+  int calcularFactorial(int n) {
+    if (n <= 1) return 1;
+    return n * calcularFactorial(n - 1);
   }
 
-  // 4.4 Stream con control de flujo
-  print('\n4.4 STREAMS (asíncrono):');
-  ejemploStream();
-
-  // 4.5 Recursión con estructuras de control
-  print('\n4.5 RECURSIÓN:');
+  print('\n4.3 RECURSIÓN:');
   int factorial = calcularFactorial(5);
   print('Factorial de 5: $factorial');
-
-  // 4.6 Switch exhaustivo con sealed classes (simulado)
-  print('\n4.6 PATTERN MATCHING EXHAUSTIVO:');
-  procesarEstado(EstadoCarga.cargando());
-  procesarEstado(EstadoCarga.exitoso('Datos cargados'));
-  procesarEstado(EstadoCarga.error('Error de red'));
-
-  // 4.7 Bucle con async/await
-  print('\n4.7 BUCLE ASÍNCRONO:');
-  procesarTareasAsync();
 
   print('\n\n╔═══════════════════════════════════════════╗');
   print('║  FIN DE EJEMPLOS                          ║');
   print('╚═══════════════════════════════════════════╝');
-}
-
-// ============================================
-// FUNCIONES AUXILIARES
-// ============================================
-
-// Guard clauses
-void procesarPedido(int? cantidad) {
-  // Salida temprana si es null
-  if (cantidad == null) {
-    print('⚠️ Cantidad no proporcionada');
-    return;
-  }
-
-  // Salida temprana si es inválida
-  if (cantidad <= 0) {
-    print('❌ Cantidad debe ser positiva');
-    return;
-  }
-
-  // Lógica principal solo si pasa las validaciones
-  print('✓ Procesando pedido de $cantidad unidades');
-}
-
-// División con control de errores
-int dividir(int a, int b) {
-  if (b == 0) {
-    throw Exception('División por cero no permitida');
-  }
-  return a ~/ b;
-}
-
-// Procesar punto con destructuring
-void procesarPunto(Map<String, int> punto) {
-  var x = punto['x'];
-  var y = punto['y'];
-
-  switch ((x, y)) {
-    case (0, 0):
-      print('📍 Origen');
-    case (var px, 0) when px != null:
-      print('📍 Sobre eje X en ($px, 0)');
-    case (0, var py) when py != null:
-      print('📍 Sobre eje Y en (0, $py)');
-    case (var px, var py) when px != null && py != null:
-      print('📍 Punto en ($px, $py)');
-    default:
-      print('❓ Punto inválido');
-  }
-}
-
-// Generador con yield
-Iterable<int> generarNumeros(int max) sync* {
-  for (int i = 1; i <= max; i++) {
-    yield i * i; // Genera cuadrados
-  }
-}
-
-// Ejemplo de Stream
-void ejemploStream() async {
-  Stream<int> stream = Stream.periodic(
-    Duration(milliseconds: 100),
-    (count) => count,
-  ).take(3);
-
-  print('Iniciando stream...');
-  await for (var valor in stream) {
-    print('Stream valor: $valor');
-  }
-  print('Stream finalizado');
-}
-
-// Recursión
-int calcularFactorial(int n) {
-  if (n <= 1) return 1;
-  return n * calcularFactorial(n - 1);
-}
-
-// Simulación de sealed class para pattern matching
-class EstadoCarga {
-  final String tipo;
-  final String? mensaje;
-
-  EstadoCarga._(this.tipo, [this.mensaje]);
-
-  factory EstadoCarga.cargando() => EstadoCarga._('cargando');
-  factory EstadoCarga.exitoso(String msg) => EstadoCarga._('exitoso', msg);
-  factory EstadoCarga.error(String msg) => EstadoCarga._('error', msg);
-}
-
-void procesarEstado(EstadoCarga estado) {
-  switch (estado.tipo) {
-    case 'cargando':
-      print('⏳ Cargando...');
-      break;
-    case 'exitoso':
-      print('✓ ${estado.mensaje}');
-      break;
-    case 'error':
-      print('❌ ${estado.mensaje}');
-      break;
-    default:
-      print('❓ Estado desconocido');
-  }
-}
-
-// Bucle asíncrono
-Future<void> procesarTareasAsync() async {
-  print('Iniciando tareas asíncronas...');
-  
-  List<String> tareas = ['Tarea 1', 'Tarea 2', 'Tarea 3'];
-  
-  for (var tarea in tareas) {
-    await Future.delayed(Duration(milliseconds: 100));
-    print('✓ Completada: $tarea');
-  }
-  
-  print('Todas las tareas completadas');
 }
 
 // ============================================
@@ -515,8 +532,6 @@ Future<void> procesarTareasAsync() async {
  * - Guard clauses (when)
  * - Destructuring
  * - Records
- * - Generators (sync*, async*)
- * - Streams (await for)
  * - Try-catch-finally
  * 
  * MEJORES PRÁCTICAS:
