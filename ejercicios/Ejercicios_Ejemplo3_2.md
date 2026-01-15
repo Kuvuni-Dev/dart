@@ -106,18 +106,45 @@ u: 2 veces
 
 ### 📝 Enunciado
 Crea un juego donde:
-1. El programa "piensa" en un número entre 1 y 50 (usa un valor fijo, por ejemplo 37)
+1. El programa "piensa" en un número **aleatorio** entre 1 y 50 (usa `Random().nextInt(50) + 1`)
 2. El usuario tiene 7 intentos para adivinar (simula intentos con una lista predefinida)
 3. Después de cada intento, da pistas: "más alto", "más bajo" o "correcto"
 4. Si adivina, muestra en cuántos intentos lo logró y un mensaje de felicitación según el desempeño:
    - 1-2 intentos: "🏆 ¡Excelente!"
    - 3-4 intentos: "🥈 ¡Muy bien!"
    - 5-7 intentos: "🥉 ¡Lo lograste!"
-5. Si no adivina en 7 intentos, termina el juego
+5. Si no adivina en 7 intentos, muestra el número secreto
 6. Usa `break` para salir cuando adivine
 
-**Lista de intentos simulados:** `[25, 40, 35, 38, 36, 37]`
-**Número a adivinar:** `37`
+**📌 IMPLEMENTACIÓN DE NÚMERO ALEATORIO:**
+
+Para generar números aleatorios en Dart:
+
+```dart
+import 'dart:math';  // ← Importar la librería math
+
+void main() {
+  // Crear una instancia de Random
+  var random = Random();
+  
+  // Generar número aleatorio entre 1 y 50
+  int numeroSecreto = random.nextInt(50) + 1;
+  
+  // Alternativa más corta:
+  int numeroSecreto2 = Random().nextInt(50) + 1;
+  
+  print('Número generado: $numeroSecreto');
+}
+```
+
+**Explicación:**
+- `Random().nextInt(n)` genera un número entre 0 y n-1
+- `Random().nextInt(50)` genera entre 0 y 49
+- Sumamos `+ 1` para obtener el rango 1 a 50
+- `import 'dart:math'` es necesario al inicio del archivo
+
+**Lista de intentos simulados:** `[25, 40, 35, 38, 36, 37]`  
+*(El número a adivinar cambiará en cada ejecución)*
 
 ### 🎯 Salida Esperada
 ```
@@ -126,6 +153,7 @@ Crea un juego donde:
 ║  Adivina el número entre 1 y 50      ║
 ╚══════════════════════════════════════╝
 
+� Número secreto generado: 37 (este número cambiará en cada ejecución)
 🎯 Tienes 7 intentos
 
 Intento #1: 25
@@ -149,6 +177,18 @@ Intento #6: 37
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🥉 ¡Lo lograste!
 Número de intentos: 6/7
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**Ejemplo si NO adivina:**
+```
+...
+Intento #7: 45
+💡 Pista: El número es más bajo
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+❌ ¡Se acabaron los intentos!
+El número secreto era: 37
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
